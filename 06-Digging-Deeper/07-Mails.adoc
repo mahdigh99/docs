@@ -282,7 +282,20 @@ The *Mail Provider* defines multiple connections inside the `config/mail.js` fil
 {
   connection: 'smtp',
 
-  smtp: {},
+  smtp: {
+    driver: 'smtp',
+    pool: true,
+    port: Env.get('SMTP_PORT', 2525),
+    host: Env.get('SMTP_HOST'),
+    secure: false,
+    auth: {
+      user: Env.get('MAIL_USERNAME'),
+      pass: Env.get('MAIL_PASSWORD')
+    },
+    maxConnections: 5,
+    maxMessages: 1000,
+    rateLimit: 10
+  },
 
   sparkpost: {
     driver: 'sparkpost',
@@ -341,6 +354,23 @@ await Mail.send('view', data, (message) => {
     options: {}
   })
 })
+----
+
+=== SMTP
+The `smtp` driver configuration options :
+
+.config/mail.js
+[source, js]
+----
+{
+    auth: {
+      user: Env.get('MAIL_USERNAME'),
+      pass: Env.get('MAIL_PASSWORD')
+    },
+    maxConnections: 5,
+    maxMessages: 1000,
+    rateLimit: 10
+}
 ----
 
 === Mailgun
